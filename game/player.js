@@ -1,7 +1,7 @@
 
 let gamescene;
 
-export class Player extends Phaser.Physics.Arcade.Sprite{
+export class Player extends Phaser.Physics.Arcade.Sprite {
 
     constructor (scene, x, y)
     {
@@ -9,15 +9,16 @@ export class Player extends Phaser.Physics.Arcade.Sprite{
         gamescene = scene;
         this.setTexture('playButton');
         this.setPosition(x, y);
+
         scene.add.existing(this);
         scene.physics.world.enable(this);
+        
+        this.body.setCollideWorldBounds(true);
     }
 
     preUpdate (time, delta)
     {
         super.preUpdate(time, delta);
-
-
         var cursors = gamescene.input.keyboard.createCursorKeys();
         if (cursors.left.isDown) {
             this.body.setVelocityX(-100);
