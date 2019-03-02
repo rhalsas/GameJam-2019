@@ -1,5 +1,6 @@
 
 import {Player} from './player.js';
+import {Booster} from './booster.js';
 export class gameScene extends Phaser.Scene{
 
     preload(){
@@ -7,6 +8,11 @@ export class gameScene extends Phaser.Scene{
         this.load.image('tiles', './img/Tileset.png');
         this.load.tilemapTiledJSON('map', './level/Level_01.json');
         this.load.multiatlas('runningman', './img/RunningMan.json', './img');
+
+        // Player character images
+        this.load.image('pl_normal', './img/tools/normaali.png');
+        this.load.image('pl_slide', './img/tools/liuku.png');
+        this.load.image('collectable_item', './img/tools/liuku.png');
     }
     create(){
        
@@ -21,7 +27,7 @@ export class gameScene extends Phaser.Scene{
         //player = this.physics.add.sprite(200, 200, 'playButton');
       
        
-        this.player = new Player(this,150,50);
+        this.player = new Player(this,150,100);
         this.physics.add.collider(this.player, layer);
         this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
         // make the camera follow the player
@@ -31,9 +37,25 @@ export class gameScene extends Phaser.Scene{
         this.cameras.main.setBackgroundColor('#ccccff'); 
 
        
+
+
+        var boosters = this.physics.add.group({
+            classType: Booster,
+            maxSize: 60,
+            runChildUpdate: false
+        });
+
+        this.physics.add.overlap(this.player, boosters, collectItem, null, this);
+
+        boosters.get().addnew(400, 550);
     }
 
     update(){
     }
+}
 
+function collectItem(player, item) {
+    item.disableBody(true,true);
+    item.kill();
+    player.addBonusAcceleration();
 }

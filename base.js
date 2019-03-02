@@ -8,11 +8,14 @@ var config = {
     type: Phaser.AUTO,
     width: 1600,
     height: 1200,
+    input: {
+         gamepad: false
+    },
     physics: {
         default: 'arcade',
         arcade: {
             gravity: {y: 400},
-            debug: false
+            debug: true
         }
     },
     scene: {
@@ -32,11 +35,9 @@ function create() {
 }
 
 function update() {
-
 }
 
 var game = new Phaser.Game(config);
-
 game.scene.add('bootScene', bootScene);
 game.scene.add('menuScene', menuScene);
 game.scene.add('gameScene', gameScene);
