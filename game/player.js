@@ -3,23 +3,23 @@
 let gamescene;
 
 // Velocities
-let velocityY = -330;
+let velocityY = -200;
 let velocityX = 100;
 
-let maxVelocityX = 200;
-let maxVelocityY = 2000;
+const maxVelocityX = 500;
+const maxVelocityY = 2000;
 
 // Acceleration
-let accX = 300;
+const accX = 200;
 
 // Bonus acceleration value
-let bonusAccLeft = 0;
-let bonusAcc = 500;
 const bonusAccTimeToAdd = 500;
-const bonusMaxVelocityX = 500;
+const bonusVelocityBonusX = 500;
+let bonusVelocityX = 0;
+let bonusAccLeft = 0;
 
 // Sliding acceleration (slowing down) Should be smaller than normal acceleration
-let slideAccX = 200;
+const slideAccX = 90;
 
 let direction = 1;
 
@@ -69,12 +69,18 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         // Check if controller is in use
         if (gamescene.input.gamepad != null 
                 && gamescene.input.gamepad.total !== 0) {
-            var controller;
-            for (var i = 0; i < gamescene.input.gamepad.gamepads.length; i++) {
-                controller = gamescene.input.gamepad.gamepads[i];
-//                if (this.useController(controller)) {
-//                    return;
-//                }
+            var pads = gamescene.input.gamepad.gamepads;
+            for (var i = 0; i < pads.length; i++) {
+                var gamepad = pads[i];
+                if (!gamepad) {
+                    continue;
+                }
+                if (gamepad.left) {
+                    console.log("LEFT button");
+                }
+                if (gamepad.leftStick.x < 0) {
+                    console.log("LEFT STICK");
+                }
             }
         }
 
@@ -111,73 +117,73 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
      *
      */
     useKeyboard (cursors) {
+        console.log("DIRECTION " + direction);
         if (bonusAccLeft > 0) {
             bonusAccLeft--;
             if (bonusAccLeft === 0) {
-                this.body.setMaxVelocity(bonusMaxVelocityX, maxVelocityY);
+                bonusVelocityX = 0;
             }
         }
-        console.log("BONUS LEFT " + bonusAccLeft);
         var changeInJump = false;
         if (cursors.down.isDown) {
-            console.log("DOWN " + this.body.velocity.x);
+//            console.log("DOWN " + this.body.velocity.x);
             if (sliding === false
                 && (this.body.velocity.x > 5 || this.body.velocity.x < -5)
                 && this.isTouchingGround()) {
                 // Start sliding.
-                this.body.setGravityX(-direction * slideAccX);
+                this.body.setAccelerationX(-direction * slideAccX);
                 sliding = true;
                // this.setTexture('pl_slide');
             } else if (this.body.velocity.x <= 5 && this.body.velocity.x >= -5) { // practically zero
-                this.body.setGravityX(0);
                 this.body.setVelocityX(0);
+                this.body.setAccelerationX(0);
                 sliding = false;
                 //this.setTexture('pl_normal');
             }
             return;
         } else if (sliding === true) {
-//            console.log("SLIDING");
             // Sliding is true, but down is not pressed
-            this.body.setGravityX(0);
             this.body.setVelocityX(0);
+            this.body.setAccelerationX(0);
             sliding = false;
             //this.setTexture('pl_normal');
             return
         } else if (jumping === true) {
-//            console.log("JUMPING + " + this.body.velocity.x);
             if (this.isTouchingGround()) {
                 jumping = false;
                 changeInJump = true;
+            } else if (cursors.left.isDown && direction === -1) {
+                this.body.setVelocityX(-(accX + bonusVelocityX));
+                return;
+            } else if (cursors.right.isDown && direction === 1) {
+                this.body.setVelocityX(accX + bonusVelocityX);
+                return;
             } else {
-                this.body.setGravityX(0);
+                this.body.setVelocityX(0);
                 return;
             }
         }
         if (cursors.left.isDown) {
-//            console.log("LEFT");
             if (changeInJump && direction != -1) {
                 this.body.setVelocityX(0);
             }
-            this.body.setGravityX(-(accX + ((bonusAccLeft > 0) ? bonusAcc : 0)));
+            this.body.setVelocityX(-(accX + bonusVelocityX));
             direction = -1;
             if(this.anims.currentAnim.key!== 'run'){
                 this.anims.play('run');
             }
             this.flipX = true;
         } else if (cursors.right.isDown) {
-//            console.log("RIGHT");
             if (changeInJump && direction != 1) {
                 this.body.setVelocityX(0);
             }
-            this.body.setGravityX(accX + ((bonusAccLeft > 0) ? bonusAcc : 0));
+            this.body.setVelocityX(accX + bonusVelocityX);
             direction = 1;
             if(this.anims.currentAnim.key!== 'run'){
                 this.anims.play('run');
             }
             this.flipX = false;
         } else if (!cursors.up.isDown) {
-//            console.log("ELSE");
-            this.body.setGravityX(0);
             this.body.setVelocityX(0);
             if(this.anims.currentAnim.key!== 'idle'){
                 this.anims.play('idle');
@@ -195,7 +201,6 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
      */
     addBonusAcceleration() {
         bonusAccLeft = bonusAccTimeToAdd;
-        this.body.setMaxVelocity(bonusMaxVelocityX, maxVelocityY);
-
+        bonusVelocityX = bonusVelocityBonusX;
     }
 }
