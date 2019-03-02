@@ -8,6 +8,9 @@ var config = {
     type: Phaser.AUTO,
     width: 800,
     height: 600,
+    input: {
+         gamepad: true
+    },
     physics: {
         default: 'arcade',
         arcade: {
@@ -32,13 +35,9 @@ function create() {
 }
 
 function update() {
-
 }
 
 var game = new Phaser.Game(config);
-console.log("HALOO");
-console.log(bootScene);
-console.log(menuScene);
 game.scene.add('bootScene', bootScene);
 game.scene.add('menuScene', menuScene);
 game.scene.add('gameScene', gameScene);
