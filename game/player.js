@@ -37,12 +37,12 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         scene.physics.world.enable(this);
 
         this.body.setCollideWorldBounds(true);
-        this.body.setSize(24,64);
-        this.body.offset = {x: 16, y: 4}
-
+        this.body.setSize(16,64, true);
+        this.body.setOffset(16,4);
+       
         this.setMaxVelocity(maxVelocityX, maxVelocityY);
         this.setCollideWorldBounds(true);
-        this.setDisplaySize(16,16);
+        this.setDisplaySize(24,24);
         let runFrames = gamescene.anims.generateFrameNames('runningman', {
             start: 1, end: 5, zeroPad: 0,
             prefix: 'running', suffix: '.png'
@@ -54,8 +54,30 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
             prefix: 'running', suffix: '.png'
         });
 
+        let slidingFrames = gamescene.anims.generateFrameNames('runningman', {
+            start: 6, end: 10, zeroPad: 0,
+            prefix: 'running', suffix: '.png'
+        });
+
+        let slidingLoopFrames = [
+            slidingFrames[2],
+            slidingFrames[3],
+            slidingFrames[4],
+            slidingFrames[3],
+            slidingFrames[2],
+            slidingFrames[3],
+            slidingFrames[4],
+            slidingFrames[3],
+        ]
+
+        let toSlidingLoopFrames = [
+            slidingFrames[0],
+            slidingFrames[1]
+        ]
         scene.anims.create({ key: 'idle', frames: idleFrames, frameRate: 20, repeat: -1 });
         scene.anims.create({ key: 'run', frames: runFrames, frameRate: 20, repeat: -1 });
+        scene.anims.create({ key: 'toSlide', frames: toSlidingLoopFrames, frameRate: 20, repeat: 1});
+        scene.anims.create({ key: 'slide', frames: slidingLoopFrames, frameRate: 20, repeat: -1 });
         this.anims.play('idle');
         this.setOrigin(0.5,1);
 
@@ -82,6 +104,13 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
             }
         }
 
+        if(sliding == true){
+            this.body.setSize(16,32, true);
+            this.body.setOffset(16,24);
+        } else {
+            this.body.setSize(16,64, true);
+            this.body.setOffset(16,4);
+        }
         // If controller was not used, use keyboard
         var cursors = gamescene.input.keyboard.createCursorKeys();
         this.useKeyboard(cursors);
@@ -127,6 +156,11 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
                 && (this.body.velocity.x > 5 || this.body.velocity.x < -5)
                 && this.isTouchingGround()) {
                 // Start sliding.
+                if(this.anims.currentAnim.key != 'toSlide' || this.anims.currentAnim.key != 'slide'){
+                    this.anims.play('toSlide');
+                    this.once('animationcomplete', () => this.anims.play('slide'));
+                }
+                
                 this.body.setAccelerationX(-direction * slideAccX);
                 sliding = true;
                // this.setTexture('pl_slide');
