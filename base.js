@@ -11,7 +11,7 @@ var config = {
     physics: {
         default: 'arcade',
         arcade: {
-            gravity: {y: 0},
+            gravity: {y: 400},
             debug: false
         }
     },
@@ -24,17 +24,17 @@ var config = {
 };
 
 function preload() {
- 
+
 }
- 
+
 function create() {
- 
+
 }
- 
+
 function update() {
- 
+
 }
- 
+
 var game = new Phaser.Game(config);
 console.log("HALOO");
 console.log(bootScene);
@@ -44,8 +44,3 @@ game.scene.add('menuScene', menuScene);
 game.scene.add('gameScene', gameScene);
 
 game.scene.start('bootScene');
-
-
-
-
-
