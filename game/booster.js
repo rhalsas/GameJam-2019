@@ -6,7 +6,6 @@ export class Booster extends Phaser.Physics.Arcade.Image {
 
     constructor(scene, x, y) {
         super(scene, x, y);
-//        Phaser.Physics.Arcade.Image.call(this, scene, 0, 0, null, null);
         this.setBlendMode(1);
         this.setDepth(1);
         this.setPosition(x, y);

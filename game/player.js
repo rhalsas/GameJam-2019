@@ -1,19 +1,29 @@
 
+// Scene needed for input
+let gamescene;
+
 // Velocities
 let velocityY = -330;
 let velocityX = 100;
 
-let maxVelocityX = 500;
-let maxVelocityY = 500;
+let maxVelocityX = 200;
+let maxVelocityY = 2000;
+
+// Acceleration
 let accX = 300;
+
+// Bonus acceleration value
+let bonusAccLeft = 0;
+let bonusAcc = 500;
+const bonusAccTimeToAdd = 500;
+const bonusMaxVelocityX = 500;
 
 // Sliding acceleration (slowing down) Should be smaller than normal acceleration
 let slideAccX = 200;
 
-let gamescene;
-
 let direction = 1;
 
+// Flags for telling if there is jump or slide in progress
 let jumping = false;
 let sliding = false;
 
@@ -79,6 +89,13 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
      *
      */
     useKeyboard (cursors) {
+        if (bonusAccLeft > 0) {
+            bonusAccLeft--;
+            if (bonusAccLeft === 0) {
+                this.body.setMaxVelocity(bonusMaxVelocityX, maxVelocityY);
+            }
+        }
+        console.log("BONUS LEFT " + bonusAccLeft);
         var changeInJump = false;
         if (cursors.down.isDown) {
             console.log("DOWN " + this.body.velocity.x);
@@ -119,16 +136,16 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
             if (changeInJump && direction != -1) {
                 this.body.setVelocityX(0);
             }
-            this.body.setGravityX(-accX);
+            this.body.setGravityX(-(accX + ((bonusAccLeft > 0) ? bonusAcc : 0)));
             direction = -1;
         } else if (cursors.right.isDown) {
 //            console.log("RIGHT");
             if (changeInJump && direction != 1) {
                 this.body.setVelocityX(0);
             }
-            this.body.setGravityX(accX);
+            this.body.setGravityX(accX + ((bonusAccLeft > 0) ? bonusAcc : 0));
             direction = 1;
-        } else {
+        } else if (!cursors.up.isDown) {
 //            console.log("ELSE");
             this.body.setGravityX(0);
             this.body.setVelocityX(0);
@@ -137,5 +154,14 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
             jumping = true;
             this.body.setVelocityY(velocityY);
         }
+    }
+
+    /*
+     *
+     */
+    addBonusAcceleration() {
+        bonusAccLeft = bonusAccTimeToAdd;
+        this.body.setMaxVelocity(bonusMaxVelocityX, maxVelocityY);
+
     }
 }

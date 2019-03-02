@@ -29,7 +29,7 @@ export class gameScene extends Phaser.Scene{
 
         this.physics.add.overlap(this.player, boosters, collectItem, null, this);
 
-        boosters.get().addnew(400, 450);
+        boosters.get().addnew(400, 550);
     }
 
     update(){
@@ -39,4 +39,5 @@ export class gameScene extends Phaser.Scene{
 function collectItem(player, item) {
     item.disableBody(true,true);
     item.kill();
+    player.addBonusAcceleration();
 }
