@@ -15,8 +15,5 @@ export class Player extends Phaser.GameObjects.Sprite {
         super.preUpdate(time, delta);
     }
 
-    update (){
-    
-    }
 
 }
