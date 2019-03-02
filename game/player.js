@@ -29,8 +29,6 @@ let sliding = false;
 
 export class Player extends Phaser.Physics.Arcade.Sprite {
 
-    
-
     constructor (scene, x, y)
     {
         super(scene, x, y);
@@ -42,7 +40,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         this.body.setCollideWorldBounds(true);
         this.body.setSize(24,64);
         this.body.offset = {x: 16, y: 4}
-       
+
         this.setMaxVelocity(maxVelocityX, maxVelocityY);
         this.setCollideWorldBounds(true);
         this.setDisplaySize(16,16);
@@ -50,24 +48,25 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
             start: 1, end: 5, zeroPad: 0,
             prefix: 'running', suffix: '.png'
         });
-        
+
 
         let idleFrames = gamescene.anims.generateFrameNames('runningman', {
             start: 4, end: 4, zeroPad: 0,
             prefix: 'running', suffix: '.png'
         });
+
         scene.anims.create({ key: 'idle', frames: idleFrames, frameRate: 20, repeat: -1 });
         scene.anims.create({ key: 'run', frames: runFrames, frameRate: 20, repeat: -1 });
         this.anims.play('idle');
         this.setOrigin(0.5,1);
-        
+
     }
 
     preUpdate (time, delta) {
         super.preUpdate(time, delta);
 
         // Check if controller is in use
-        if (gamescene.input.gamepad != null 
+        if (gamescene.input.gamepad != null
                 && gamescene.input.gamepad.total !== 0) {
             var pads = gamescene.input.gamepad.gamepads;
             for (var i = 0; i < pads.length; i++) {
@@ -152,15 +151,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
             if (this.isTouchingGround()) {
                 jumping = false;
                 changeInJump = true;
-            } else if (cursors.left.isDown && direction === -1) {
-                this.body.setVelocityX(-(accX + bonusVelocityX));
-                return;
-            } else if (cursors.right.isDown && direction === 1) {
-                this.body.setVelocityX(accX + bonusVelocityX);
-                return;
             } else {
                 this.body.setVelocityX(0);
-                return;
             }
         }
         if (cursors.left.isDown) {
@@ -188,7 +180,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
             if(this.anims.currentAnim.key!== 'idle'){
                 this.anims.play('idle');
             }
-          
+
         }
         if (cursors.up.isDown && this.isTouchingGround()) {
             jumping = true;
