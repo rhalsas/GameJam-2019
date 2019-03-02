@@ -6,8 +6,8 @@ import {MyConfig} from './config/config.js';
 
 var config = {
     type: Phaser.AUTO,
-    width: 800,
-    height: 600,
+    width: 1600,
+    height: 1200,
     physics: {
         default: 'arcade',
         arcade: {
@@ -36,9 +36,7 @@ function update() {
 }
 
 var game = new Phaser.Game(config);
-console.log("HALOO");
-console.log(bootScene);
-console.log(menuScene);
+
 game.scene.add('bootScene', bootScene);
 game.scene.add('menuScene', menuScene);
 game.scene.add('gameScene', gameScene);

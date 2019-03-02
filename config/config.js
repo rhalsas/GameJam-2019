@@ -1,7 +1,7 @@
 export class MyConfig {
     constructor(){
-        this.GAME_HEIGHT = 32*20;
-        this.GAME_WIDTH = 32*30;
+        this.GAME_HEIGHT = 16*100;
+        this.GAME_WIDTH = 16*50;
     }
 
 }

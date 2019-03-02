@@ -6,7 +6,7 @@ export class bootScene extends Phaser.Scene{
     }
 
     create(){
-        this.scene.start('menuScene');
+        this.scene.start('gameScene');
     }
 
 }
