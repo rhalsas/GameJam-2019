@@ -14,7 +14,7 @@ const accX = 200;
 
 // Bonus acceleration value
 const bonusAccTimeToAdd = 500;
-const bonusVelocityBonusX = 500;
+const bonusVelocityBonusX = 200;
 let bonusVelocityX = 0;
 let bonusAccLeft = 0;
 
@@ -24,7 +24,6 @@ const slideAccX = 90;
 let direction = 1;
 
 // Flags for telling if there is jump or slide in progress
-let jumping = false;
 let sliding = false;
 
 export class Player extends Phaser.Physics.Arcade.Sprite {
@@ -116,14 +115,12 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
      *
      */
     useKeyboard (cursors) {
-        console.log("DIRECTION " + direction);
         if (bonusAccLeft > 0) {
             bonusAccLeft--;
             if (bonusAccLeft === 0) {
                 bonusVelocityX = 0;
             }
         }
-        var changeInJump = false;
         if (cursors.down.isDown) {
 //            console.log("DOWN " + this.body.velocity.x);
             if (sliding === false
@@ -145,20 +142,9 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
             this.body.setVelocityX(0);
             this.body.setAccelerationX(0);
             sliding = false;
-            //this.setTexture('pl_normal');
             return
-        } else if (jumping === true) {
-            if (this.isTouchingGround()) {
-                jumping = false;
-                changeInJump = true;
-            } else {
-                this.body.setVelocityX(0);
-            }
         }
         if (cursors.left.isDown) {
-            if (changeInJump && direction != -1) {
-                this.body.setVelocityX(0);
-            }
             this.body.setVelocityX(-(accX + bonusVelocityX));
             direction = -1;
             if(this.anims.currentAnim.key!== 'run'){
@@ -166,9 +152,6 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
             }
             this.flipX = true;
         } else if (cursors.right.isDown) {
-            if (changeInJump && direction != 1) {
-                this.body.setVelocityX(0);
-            }
             this.body.setVelocityX(accX + bonusVelocityX);
             direction = 1;
             if(this.anims.currentAnim.key!== 'run'){
@@ -183,7 +166,6 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
         }
         if (cursors.up.isDown && this.isTouchingGround()) {
-            jumping = true;
             this.body.setVelocityY(velocityY);
         }
     }
