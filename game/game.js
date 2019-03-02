@@ -11,7 +11,8 @@ export class gameScene extends Phaser.Scene{
         const map = this.make.tilemap({ key: "map", tileWidth: 16, tileHeight: 16 });
         const tileset = map.addTilesetImage("tiles");
         const layer = map.createStaticLayer(0, tileset, 0, 0);
-        
+        //player = this.physics.add.sprite(200, 200, 'playButton');
+      
         this.player = new Player(this,150,150);
        
     }

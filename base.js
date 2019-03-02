@@ -4,8 +4,38 @@ import {menuScene} from './menu/menu.js';
 import {MyConfig} from './config/config.js';
 
 
+var config = {
+    type: Phaser.AUTO,
+    width: 800,
+    height: 600,
+    physics: {
+        default: 'arcade',
+        arcade: {
+            gravity: {y: 0},
+            debug: false
+        }
+    },
+    scene: {
+        key: 'main',
+        preload: preload,
+        create: create,
+        update: update
+    }
+};
 
-var game = new Phaser.Game(MyConfig.GAME_WIDTH, MyConfig.GAME_HEIGHT, Phaser.WEBGL, '');
+function preload() {
+ 
+}
+ 
+function create() {
+ 
+}
+ 
+function update() {
+ 
+}
+ 
+var game = new Phaser.Game(config);
 console.log("HALOO");
 console.log(bootScene);
 console.log(menuScene);
