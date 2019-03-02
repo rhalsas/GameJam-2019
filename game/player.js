@@ -1,26 +1,22 @@
-Player = function (game, x, y) {
-    Phaser.Sprite.call(this,game,x,y,'playButton');
-    this.animations.add('idle',[0]);
-    this.animations.play('idle');
-    console.log("createdtatta", this.x, this.y)
-    game.add.existing(this);
-};
 
-Player.prototype = Object.create(Phaser.Sprite.prototype);
-Player.prototype.constructor = Player;
-Player.prototype.update = function() {
-    if (game.input.keyboard.isDown(Phaser.Keyboard.LEFT))
+
+export class Player extends Phaser.GameObjects.Sprite {
+
+    constructor (scene, x, y)
     {
-        
-        this.x -= 5;
-    }
-    else if (game.input.keyboard.isDown(Phaser.Keyboard.RIGHT))
-    {
-        this.x += 5;
-    }
-    else if (game.input.keyboard.isDown(Phaser.Keyboard.UP))
-    {
-        this.y -= 5;
+        super(scene, x, y);
+        this.setTexture('playButton');
+        this.setPosition(x, y);
+        scene.add.existing(this);
     }
 
-};
+    preUpdate (time, delta)
+    {
+        super.preUpdate(time, delta);
+    }
+
+    update (){
+    
+    }
+
+}

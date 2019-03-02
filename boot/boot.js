@@ -1,13 +1,12 @@
-let bootState = {
+export class bootScene extends Phaser.Scene{
 
-    preload: function(){
-        game.load.image('playButton', 'img/tools/playButton.png');
-        game.load.image('exitButton', 'img/tools/exitButton.png');
-    },
+    preload(){
+        this.load.image('playButton', 'img/tools/playButton.png');
+        this.load.image('exitButton', 'img/tools/exitButton.png');
+    }
 
-    create: function(){
-        
-        game.state.start('menu');
+    create(){
+        this.scene.start('menuScene');
     }
 
 }

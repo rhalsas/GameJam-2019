@@ -1,8 +1,9 @@
-var gameState = {
-    player : null,
-    create : function(){
-        this.player = new Player(game,150,150);
-    },
-    update: function(){
+
+import {Player} from './player.js';
+export class gameScene extends Phaser.Scene{
+
+    create(){
+        this.player = new Player(this,150,150);
     }
-};
+
+}

@@ -1,19 +1,19 @@
-
-var GAME_HEIGHT = 32*20;
-var GAME_WIDTH  = 32*30;
-var player = null;
-var game = new Phaser.Game(GAME_WIDTH, GAME_HEIGHT, Phaser.WEBGL, '');
-
-var saveMapButton;
-var selectTerrainButton;
-var selectUnitButton;
+import {bootScene} from './boot/boot.js';
+import {gameScene} from './game/game.js';
+import {menuScene} from './menu/menu.js';
+import {MyConfig} from './config/config.js';
 
 
-game.state.add('boot', bootState);
-game.state.add('menu', menuState);
-game.state.add('game', gameState);
 
-game.state.start('boot');
+var game = new Phaser.Game(MyConfig.GAME_WIDTH, MyConfig.GAME_HEIGHT, Phaser.WEBGL, '');
+console.log("HALOO");
+console.log(bootScene);
+console.log(menuScene);
+game.scene.add('bootScene', bootScene);
+game.scene.add('menuScene', menuScene);
+game.scene.add('gameScene', gameScene);
+
+game.scene.start('bootScene');
 
 
 
