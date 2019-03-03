@@ -130,36 +130,16 @@ export class gameScene extends Phaser.Scene{
         zone2.body.debugBodyColor = zone2.body.touching.none ? 0x00ffff : 0xffff00;
         zone3.body.debugBodyColor = zone3.body.touching.none ? 0x00ffff : 0xffff00;
 
-        if (this.input.gamepad != null
-            && this.input.gamepad.total !== 0) {
-                let pad = this.input.gamepad.getPad(0);
-        var pads = this.input.gamepad.gamepads;
-        
-        for (var i = 0; i < pads.length; i++) {
-            var gamepad = pads[i];
-            if (!gamepad) {
-               continue;
-            }
-            if(gamepad.A){
-                console.log("A");
-            }
-            if (gamepad.left) {
-                console.log("LEFT button");
-            }
-            if (gamepad.leftStick.x < 0) {
-                console.log("LEFT STICK");
-            }
-        }
-    }
+       
     }
 
     createZones(){
-        zone1 = this.add.zone(1400, 200).setSize(200, 200);
+        zone1 = this.add.zone(1410, 250).setSize(20, 120);
         this.physics.world.enable(zone1);
         zone1.body.setAllowGravity(false);
         zone1.body.moves = false;
 
-        zone2 = this.add.zone(300, 725).setSize(500, 50);
+        zone2 = this.add.zone(330, 220).setSize(50, 250);
         this.physics.world.enable(zone2);
         zone2.body.setAllowGravity(false);
         zone2.body.moves = false;
