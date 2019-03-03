@@ -9,7 +9,7 @@ var config = {
     width: 1600,
     height: 1200,
     input: {
-         gamepad: false
+         gamepad: true
     },
     physics: {
         default: 'arcade',
@@ -35,6 +35,7 @@ function create() {
 }
 
 function update() {
+
 }
 
 var game = new Phaser.Game(config);

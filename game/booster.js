@@ -1,7 +1,7 @@
 
-export class Booster extends Phaser.Physics.Arcade.Image {
+export class Booster extends Phaser.Physics.Arcade.Sprite {
     preload() {
-        this.load.image('collectable_item', './img/tools/liuku.png');
+       
     }
 
     constructor(scene, x, y) {
@@ -9,10 +9,21 @@ export class Booster extends Phaser.Physics.Arcade.Image {
         this.setBlendMode(1);
         this.setDepth(1);
         this.setPosition(x, y);
-        this.setTexture('collectable_item');
+        this.setDisplaySize(12,12);
+        console.log(scene.anims)
+        let powerUpFrames = scene.anims.generateFrameNames('powerUp', {
+            start: 1, end: 6, zeroPad: 0,
+            prefix: 'powerup', suffix: '.png'
+        });
+        
+        console.log(powerUpFrames);
+        scene.anims.create({ key: 'powerupping', frames: powerUpFrames, frameRate: 20, repeat: -1 });
+        console.log(scene.anims)
+        this.anims.play('powerupping');
     }
 
     preUpdate (time, delta) {
+        super.preUpdate(time, delta);
     }
 
     kill () {

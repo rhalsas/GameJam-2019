@@ -85,24 +85,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
     preUpdate (time, delta) {
         super.preUpdate(time, delta);
-
         // Check if controller is in use
-        if (gamescene.input.gamepad != null
-                && gamescene.input.gamepad.total !== 0) {
-            var pads = gamescene.input.gamepad.gamepads;
-            for (var i = 0; i < pads.length; i++) {
-                var gamepad = pads[i];
-                if (!gamepad) {
-                    continue;
-                }
-                if (gamepad.left) {
-                    console.log("LEFT button");
-                }
-                if (gamepad.leftStick.x < 0) {
-                    console.log("LEFT STICK");
-                }
-            }
-        }
+        
 
         if(sliding == true){
             this.body.setSize(16,32, true);
@@ -120,6 +104,10 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         return (this.body.blocked.down);
     }
 
+    update(){
+
+        
+    }
     /*
      *
      */
