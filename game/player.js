@@ -6,7 +6,7 @@ let gamescene;
 let velocityY = -200;
 let velocityX = 100;
 
-const maxVelocityX = 500;
+const maxVelocityX = 500;                                                   
 const maxVelocityY = 2000;
 
 // Acceleration

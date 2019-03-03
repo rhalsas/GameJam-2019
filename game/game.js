@@ -8,7 +8,7 @@ import {Booster} from './booster.js';
 export class gameScene extends Phaser.Scene{
 
     preload(){
-        this.load.image('mountains', './img/Background.png');
+        this.load.image('mountains', './img/koodi2.png');
         this.load.image('tiles', './img/Tileset.png');
         this.load.tilemapTiledJSON('map', './level/Level_01.json');
         this.load.multiatlas('runningman', './img/RunningMan.json', './img');
@@ -37,18 +37,18 @@ export class gameScene extends Phaser.Scene{
     }
     create(){
        
-        let mountains = this.add.image(0, 0, 'mountains');
+        let mountains = this.add.image(750, 200, 'mountains');
         const map = this.make.tilemap({ key: 'map'});
         const tileset = map.addTilesetImage("Terrain","tiles");
         const layer = map.createStaticLayer("World", tileset, 0, 0);
         
-        mountains.setDisplaySize(3200, 2000);
+        mountains.setDisplaySize(2000, 1500);
 
         layer.setCollisionByProperty({ collides: true });
         //player = this.physics.add.sprite(200, 200, 'playButton');
         this.running = this.sound.add('running', { loop: true });
         this.jump = this.sound.add('jump', { loop: false });
-        this.jump.volume = 0.5;
+        this.jump.volume = 0.1;
         this.powerup = this.sound.add('powerup', { loop: false });
         this.powerup.volume = 0.5;
         this.music = this.sound.add('music', { loop: true });
@@ -84,30 +84,32 @@ export class gameScene extends Phaser.Scene{
 
         this.lastBestTimeText = this.add.text(220, 60, "Top Time:",{font: '30px Arial', fill: 
         '#FFFFFF', align: 'center'});
-        let topTime = localStorage.getItem("toptime");
-        if(topTime){
-            this.lastBestTimeText.setText(topTime);
+        this.lastTopTime = localStorage.getItem("toptime");
+        if(this.lastTopTime ){
+            this.lastBestTimeText.setText("Top Time:" + this.lastTopTime);
         }
         this.timeInSeconds = 0;
         this.timeText = this.add.text(220, 30, "0:00",{font: '30px Arial', fill: 
         '#FFFFFF', align: 'center'});
         
-        this.time.addEvent({ delay: 100, callback: this.updateTimer, callbackScope: this, loop: true });
+        this.time.addEvent({ delay: 10, callback: this.updateTimer, callbackScope: this, loop: true });
 
         
     }
 
     updateTimer(){
         if(updateTime == true){
-            this.timeInSeconds += 0.1;
+            this.timeInSeconds += 0.01;
             this.timeText.setText(this.timeInSeconds.toFixed(1));
         }
         
     }
 
     updateWinTime(){
-        localStorage.setItem("toptime", this.timeInSeconds.toString());
-        this.lastBestTimeText.setText("Top Time:" + this.timeInSeconds.toFixed(1));
+        if(this.lastTopTime && parseFloat(this.lastTopTime) > parseFloat(this.timeInSeconds)){
+            localStorage.setItem("toptime", this.timeInSeconds.toFixed(2).toString());
+            this.lastBestTimeText.setText("Top Time:" + this.timeInSeconds.toFixed(2));
+        }
     }
 
     update(){
@@ -126,9 +128,9 @@ export class gameScene extends Phaser.Scene{
             lastZoneTouched = 3;
         }
         
-        zone1.body.debugBodyColor = zone1.body.touching.none ? 0x00ffff : 0xffff00;
-        zone2.body.debugBodyColor = zone2.body.touching.none ? 0x00ffff : 0xffff00;
-        zone3.body.debugBodyColor = zone3.body.touching.none ? 0x00ffff : 0xffff00;
+        //zone1.body.debugBodyColor = zone1.body.touching.none ? 0x00ffff : 0xffff00;
+        //zone2.body.debugBodyColor = zone2.body.touching.none ? 0x00ffff : 0xffff00;
+        //zone3.body.debugBodyColor = zone3.body.touching.none ? 0x00ffff : 0xffff00;
 
        
     }
