@@ -18,6 +18,22 @@ export class gameScene extends Phaser.Scene{
         this.load.image('pl_normal', './img/tools/normaali.png');
         this.load.image('pl_slide', './img/tools/liuku.png');
         this.load.image('collectable_item', './img/tools/liuku.png');
+
+        this.load.audio('running', [
+            'music/sound1.mp3'
+        ]);
+        this.load.audio('jump',[
+            'music/sound2.wav'
+        ]);
+        this.load.audio('powerup',[
+            'music/sound3.wav'
+        ]);
+        this.load.audio('slide',[
+            'music/sound4.wav'
+        ]);
+        this.load.audio('music',[
+            'music/music.wav'
+        ])
     }
     create(){
        
@@ -30,7 +46,15 @@ export class gameScene extends Phaser.Scene{
 
         layer.setCollisionByProperty({ collides: true });
         //player = this.physics.add.sprite(200, 200, 'playButton');
-      
+        this.running = this.sound.add('running', { loop: true });
+        this.jump = this.sound.add('jump', { loop: false });
+        this.jump.volume = 0.5;
+        this.powerup = this.sound.add('powerup', { loop: false });
+        this.powerup.volume = 0.5;
+        this.music = this.sound.add('music', { loop: true });
+        this.slide = this.sound.add('slide', {loop: false});
+        
+        this.music.play();
        
         this.player = new Player(this,150,100);
         this.physics.add.collider(this.player, layer);
@@ -69,6 +93,8 @@ export class gameScene extends Phaser.Scene{
         '#FFFFFF', align: 'center'});
         
         this.time.addEvent({ delay: 100, callback: this.updateTimer, callbackScope: this, loop: true });
+
+        
     }
 
     updateTimer(){
@@ -148,6 +174,7 @@ export class gameScene extends Phaser.Scene{
 
 
 function collectItem(player, item) {
+    this.powerup.play();
     item.disableBody(true,true);
     item.kill();
     player.addBonusAcceleration();

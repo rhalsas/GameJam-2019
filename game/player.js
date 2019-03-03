@@ -80,6 +80,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         scene.anims.create({ key: 'slide', frames: slidingLoopFrames, frameRate: 20, repeat: -1 });
         this.anims.play('idle');
         this.setOrigin(0.5,1);
+        gamescene.running.play();
 
     }
 
@@ -90,7 +91,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
         if(sliding == true){
             this.body.setSize(16,32, true);
-            this.body.setOffset(16,24);
+            this.body.setOffset(16,30);
+     
         } else {
             this.body.setSize(16,64, true);
             this.body.setOffset(16,4);
@@ -146,6 +148,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
                 // Start sliding.
                 if(this.anims.currentAnim.key != 'toSlide' || this.anims.currentAnim.key != 'slide'){
                     this.anims.play('toSlide');
+                    gamescene.slide.play();
                     this.once('animationcomplete', () => this.anims.play('slide'));
                 }
                 
@@ -171,6 +174,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
             direction = -1;
             if(this.anims.currentAnim.key!== 'run'){
                 this.anims.play('run');
+                gamescene.running.volume = 0.5;
             }
             this.flipX = true;
         } else if (cursors.right.isDown) {
@@ -178,17 +182,20 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
             direction = 1;
             if(this.anims.currentAnim.key!== 'run'){
                 this.anims.play('run');
+                gamescene.running.volume = 0.5;
             }
             this.flipX = false;
         } else if (!cursors.up.isDown) {
             this.body.setVelocityX(0);
             if(this.anims.currentAnim.key!== 'idle'){
                 this.anims.play('idle');
+                gamescene.running.volume = 0;
             }
 
         }
         if (cursors.up.isDown && this.isTouchingGround()) {
             this.body.setVelocityY(velocityY);
+            gamescene.jump.play();
         }
     }
 
