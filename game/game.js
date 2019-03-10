@@ -26,19 +26,19 @@ export class gameScene extends Phaser.Scene{
         this.load.image('collectable_item', './img/tools/liuku.png');
 
         this.load.audio('running', [
-            'music/sound1.mp3'
+            'music/sound1.ogg'
         ]);
         this.load.audio('jump',[
-            'music/sound2.wav'
+            'music/sound2.ogg'
         ]);
         this.load.audio('powerup',[
-            'music/sound3.wav'
+            'music/sound3.ogg'
         ]);
         this.load.audio('slide',[
-            'music/sound4.wav'
+            'music/sound4.ogg'
         ]);
         this.load.audio('music',[
-            'music/music.wav'
+            'music/music.ogg'
         ])
     }
     create(){
@@ -122,7 +122,8 @@ export class gameScene extends Phaser.Scene{
 
     updateWinTime(){
         this.reenableBoosters();
-        if(this.lastTopTime && parseFloat(this.lastTopTime) > parseFloat(this.timeInSeconds)){
+	console.log(this.lastTopTime, this.timeInSeconds);
+        if(!this.lastTopTime || this.lastTopTime && parseFloat(this.lastTopTime) > parseFloat(this.timeInSeconds)){
             localStorage.setItem("toptime", this.timeInSeconds.toFixed(2).toString());
             this.lastBestTimeText.setText("Top Time:" + this.timeInSeconds.toFixed(2));
         }

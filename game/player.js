@@ -43,6 +43,9 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         this.setMaxVelocity(maxVelocityX, maxVelocityY);
         this.setCollideWorldBounds(true);
         this.setDisplaySize(24,24);
+	this.body.setAllowDrag(true);
+	this.body.setDrag(200, 0);
+
         let runFrames = gamescene.anims.generateFrameNames('runningman', {
             start: 1, end: 5, zeroPad: 0,
             prefix: 'running', suffix: '.png'
@@ -81,6 +84,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         this.anims.play('idle');
         this.setOrigin(0.5,1);
         gamescene.running.play();
+	gamescene.running.volume = 0;
         this.gamepad = this.checkGamePad();
         console.log(this.gamepad);
         this.cursors = gamescene.input.keyboard.createCursorKeys();
@@ -122,7 +126,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
             this.useKeyboard(this.cursors);
         }
 
-        if(sliding == true){
+        if(this.anims.currentAnim.key != 'toSlide' || this.anims.currentAnim.key != 'slide'){
             this.body.setSize(16,32, true);
             this.body.setOffset(16,30);
      
@@ -152,10 +156,6 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         if( controller.X || controller.B){
             this.slide();
             return;
-        }else if (sliding === true) {
-            // Sliding is true, but down is not pressed
-            this.slideStop();
-            return;
         }
 
         if (controller.leftStick.x < -0.1) {
@@ -172,37 +172,23 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         return false;
     }
 
-    slideStop(){
-        this.body.setVelocityX(0);
-        this.body.setAccelerationX(0);
-        sliding = false;
-    }
 
     slide(){
-        if (sliding === false
-            && (this.body.velocity.x > 5 || this.body.velocity.x < -5)
-            && this.isTouchingGround()) {
-            // Start sliding.
-            if(this.anims.currentAnim.key != 'toSlide' || this.anims.currentAnim.key != 'slide'){
+
+
+        if(this.anims.currentAnim.key != 'toSlide' && this.anims.currentAnim.key != 'slide'){
+	console.log(this.anims.currentAnim.key);
                 this.anims.play('toSlide');
                 gamescene.slide.play();
                 this.once('animationcomplete', () => this.anims.play('slide'));
-            }
-            
-            this.body.setAccelerationX(-direction * slideAccX);
-            sliding = true;
-           // this.setTexture('pl_slide');
-        } else if (this.body.velocity.x <= 5 && this.body.velocity.x >= -5) { // practically zero
-            this.body.setVelocityX(0);
-            this.body.setAccelerationX(0);
-            sliding = false;
-            //this.setTexture('pl_normal');
         }
-    }
+            
+}
 
     moveLeft(){
         this.body.setVelocityX(-(accX + bonusVelocityX));
             direction = -1;
+		this.body.setDrag(200,0);
             if(this.anims.currentAnim.key!== 'run'){
                 this.anims.play('run');
                 gamescene.running.volume = 0.5;
@@ -213,6 +199,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     moveRight(){
         this.body.setVelocityX(accX + bonusVelocityX);
         direction = 1;
+	this.body.setDrag(200,0);
+
         if(this.anims.currentAnim.key!== 'run'){
             this.anims.play('run');
             gamescene.running.volume = 0.5;
@@ -221,10 +209,15 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     moveDefault(){
-        this.body.setVelocityX(0);
+
+	
         if(this.anims.currentAnim.key!== 'idle'){
+	console.log("moving");
             this.anims.play('idle');
+	    this.body.setAccelerationX(0);
             gamescene.running.volume = 0;
+	    this.body.setDrag(1200,0);
+
         }
     }
 
@@ -241,14 +234,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 //            console.log("DOWN " + this.body.velocity.x);
             this.slide()
             return;
-        } else if (sliding === true) {
-            // Sliding is true, but down is not pressed
-            this.body.setVelocityX(0);
-            this.body.setAccelerationX(0);
-            sliding = false;
-            return
-        }
-        if (cursors.left.isDown) {
+        }         
+	if (cursors.left.isDown) {
             this.moveLeft();
         } else if (cursors.right.isDown) {
             this.moveRight();
